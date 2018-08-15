@@ -3,9 +3,13 @@
 #include <ctime>
 using namespace std;
 
-#define NUM 80
+#define NUM 8
 //#define KERNAL
 
+class test{
+  public:
+  int a;
+};
 
 int main() {
     std::cout << "Hello World!" << std::endl;
@@ -16,7 +20,7 @@ int main() {
         #ifdef KERNAL
         void* p = (void*) new char[2];
         #else
-        void* p = mynew(2);
+        void* p = mynew(6);
         #endif
         
         
@@ -32,11 +36,20 @@ int main() {
     }
     for(int i = 0;i<NUM;i++)
     {
+        if(i%2 == 0)
+        {
         #ifdef KERNAL
             delete pC[i];
         #else
             mydelete((void*)pC[i]);
         #endif
+        }
     }
+    
+    void *pm = mynew(2);
+    mydelete(pm);
+    
+    test t = new test;
+    
     cout<<clock()-t<<endl;
 }

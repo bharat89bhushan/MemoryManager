@@ -3,7 +3,7 @@
 #define _I_MMR_MNG_H
 
 
-#define POOLSIZE 540
+#define POOLSIZE 40
 #define BUFFSIZE 4
 
 
