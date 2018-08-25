@@ -8,6 +8,7 @@ using namespace std;
 
 #define TEST
 
+
 void* mynew(size_t size)
 {
     return SingleMemoryManager::getInstance()->allocate(size);
@@ -76,7 +77,7 @@ void IncrementBufferIndex(int& buffIndex)
             buffIndex = 0;
 }
 void* SingleMemoryManager::allocate(size_t size){
-   // cout<<__FUNCTION__<<endl;
+    cout<<__FUNCTION__<<endl;
     int buffCount = size/(BUFFSIZE+1) + 1;
     int l_buffIndex = 0;
     char* currBuff = NULL;
