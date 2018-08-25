@@ -49,7 +49,7 @@ int main() {
     void *pm = mynew(2);
     mydelete(pm);
     
-    test t = new test;
+    test* ct = new test;
     
     cout<<clock()-t<<endl;
 }

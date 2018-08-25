@@ -87,34 +87,58 @@ void* SingleMemoryManager::allocate(size_t size){
         {
             int currBuffCount = 1;
             currBuff = buffPool_4 + buffIndex;
+           
             IncrementBufferIndex(buffIndex);
             l_buffIndex+=(BUFFSIZE+1);
-            while(currBuffCount < buffCount)
+            
+            //check for contiguous space
+            while(currBuffCount < buffCount && buffIndex !=0)
             {
+                
                 if((buffPool_4[buffIndex] && 128))
                 {
+                 //Buffer in use
+                 
                     currBuff = NULL;
                     currBuffCount = 0;
+                    
+                   #if 0
+                    int inUseBuffCount = buffPool_4[buffIndex] && 127;
+                    
+                    //Jump buffIndex to next location
+                    while(inUseBuffCount>0)
+                    {
+                        IncrementBufferIndex(buffIndex);
+                        l_buffIndex+=(BUFFSIZE+1);
+                        inUseBuffCount--;
+                    }
+                    #endif
+                    
                     break;
-                }
-                else
-                {
-                    //TODO:Buffer in use
                 }
                 IncrementBufferIndex(buffIndex);
                 l_buffIndex+=(BUFFSIZE+1);
+                
                 currBuffCount++;
             }
+            
+            //contiguous space found
             if(currBuffCount == buffCount)
             {
                 break;
             }
+        }//if(!(buffPool_4[buffIndex] && 128))
+       
+        //else
+        {
+            //TODO: check Buffer in use
+            int currAllocBuff = buffPool_4[buffIndex] && 127;
+            do{
+                IncrementBufferIndex(buffIndex);
+                l_buffIndex+=(BUFFSIZE+1);
+            }
+            while((--currAllocBuff) > 0);
         }
-         //TODO: Buffer in use
-        // unsigned char currAllocBuff = buffPool_4[buffIndex] && 127;
-        
-            IncrementBufferIndex(buffIndex);
-            l_buffIndex+=(BUFFSIZE+1);
     }
     if(currBuff != NULL)
     {
@@ -148,7 +172,11 @@ void SingleMemoryManager::deallocate(void* p){
      cout<<"Already Freed Buffer"<<endl;   
     }
     else
-        currBuff[0] = 0;
+    {
+        int l_buffCount = currBuff[0] && 127);
+        int l_bytesCount = l_buffCount *  (BUFFSIZE +1);
+        memset(currBuff,0,l_buffCount);
+    }
 };
 
 SingleMemoryManager* SingleMemoryManager::getInstance()
