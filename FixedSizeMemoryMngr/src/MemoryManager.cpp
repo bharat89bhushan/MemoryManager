@@ -77,7 +77,7 @@ void IncrementBufferIndex(int& buffIndex)
 }
 void* SingleMemoryManager::allocate(size_t size){
    // cout<<__FUNCTION__<<endl;
-    int buffCount = size/BUFFSIZE + 1;
+    int buffCount = size/(BUFFSIZE+1) + 1;
     int l_buffIndex = 0;
     char* currBuff = NULL;
     void* ret = NULL;
@@ -173,9 +173,15 @@ void SingleMemoryManager::deallocate(void* p){
     }
     else
     {
-        int l_buffCount = currBuff[0] && 127);
+        int l_buffCount = (currBuff[0] && 127);
         int l_bytesCount = l_buffCount *  (BUFFSIZE +1);
-        memset(currBuff,0,l_buffCount);
+        while(l_buffCount > 0)
+        {
+            currBuff[0] = 0;
+            currBuff+=(BUFFSIZE+1);
+            l_buffCount--;
+        }
+         //TODO: Check performance with Reset header byte only
     }
 };
 
